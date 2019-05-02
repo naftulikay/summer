@@ -4,6 +4,8 @@ use std::io;
 use std::io::prelude::*;
 use std::path::PathBuf;
 
+use rayon::prelude::*;
+
 use sha2::Digest;
 use sha2::Sha256;
 
@@ -28,7 +30,13 @@ fn shasum(path: &PathBuf) -> Result<String, io::Error> {
 }
 
 fn main() {
-    for path in env::args().skip(1).map(|s| PathBuf::from(s)) {
-        println!("{} {}", shasum(&path).unwrap(), path.display());
-    }
+    env::args()
+        .skip(1)
+        .map(|s| PathBuf::from(s))
+        .collect::<Vec<PathBuf>>()
+        .par_iter()
+        .for_each(|path| match shasum(&path) {
+            Ok(sum) => println!("{}  {}", path.display(), sum),
+            Err(e) => eprintln!("Error: Unable to compute sum for {}: {}", path.display(), e),
+        });
 }
