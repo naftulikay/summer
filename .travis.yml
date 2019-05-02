@@ -1,0 +1,29 @@
+---
+dist: xenial
+
+language: rust
+
+rust:
+   - stable
+   - beta
+   - nightly
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - rust: nightly
+
+cache: cargo
+
+addons:
+  apt:
+    packages: [musl, musl-dev, musl-tools]
+
+before_install: rustup target install x86_64-unknown-linux-musl
+install: cargo build --release
+script: cargo test --verbose
+
+notifications:
+  email:
+    on_success: never
+    on_failure: never
