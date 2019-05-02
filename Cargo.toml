@@ -5,3 +5,5 @@ authors = ["Naftuli Kay <me@naftuli.wtf>"]
 edition = "2018"
 
 [dependencies]
+hex = "0.3"
+sha2 = "0.8"
