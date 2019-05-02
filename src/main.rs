@@ -1,3 +1,9 @@
+use std::env;
+
+use std::path::PathBuf;
+
 fn main() {
-    println!("Hello, world!");
+    for path in env::args().skip(1).map(|s| PathBuf::from(s)) {
+        println!("{:?}", path);
+    }
 }
